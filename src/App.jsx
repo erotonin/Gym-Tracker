@@ -1,8 +1,9 @@
 import { Routes, Route, NavLink } from 'react-router-dom';
-import { Dumbbell, History, Settings as SettingsIcon } from 'lucide-react';
+import { Dumbbell, History, Settings as SettingsIcon, BarChart2 } from 'lucide-react';
 import Workout from './pages/Workout';
 import HistoryPage from './pages/History';
 import Settings from './pages/Settings';
+import Analytics from './pages/Analytics';
 import { supabase } from './supabaseClient';
 import { useState, useEffect } from 'react';
 
@@ -10,7 +11,6 @@ function App() {
   const [hasDb, setHasDb] = useState(false);
 
   useEffect(() => {
-    // Check if user has configured Supabase
     if (supabase) {
       setHasDb(true);
     }
@@ -23,15 +23,18 @@ function App() {
         <div style={{color: 'var(--text-muted)', fontSize: '0.9rem'}}>
           {hasDb ? <span style={{color: 'var(--success)'}}>● Database Connected</span> : <span style={{color: 'var(--danger)'}}>● Local Mode Only</span>}
         </div>
-        <nav>
+        <nav style={{ display: 'flex', justifyContent: 'center', gap: '5px', marginTop: '15px', flexWrap: 'wrap' }}>
           <NavLink to="/" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-            <Dumbbell size={20} /> Tập Luyện
+            <Dumbbell size={18} /> Tập
           </NavLink>
           <NavLink to="/history" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-            <History size={20} /> Lịch Sử
+            <History size={18} /> Lịch Sử
+          </NavLink>
+          <NavLink to="/analytics" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
+            <BarChart2 size={18} /> Thống Kê
           </NavLink>
           <NavLink to="/settings" className={({ isActive }) => (isActive ? "nav-link active" : "nav-link")}>
-            <SettingsIcon size={20} /> Cài Đặt
+            <SettingsIcon size={18} /> Cài Đặt
           </NavLink>
         </nav>
       </header>
@@ -40,6 +43,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Workout />} />
           <Route path="/history" element={<HistoryPage />} />
+          <Route path="/analytics" element={<Analytics />} />
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </main>

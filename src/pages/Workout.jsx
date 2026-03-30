@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { workoutData } from '../data/workoutData';
 import { supabase } from '../supabaseClient';
-import { Save, Timer, Play, RotateCcw, X } from 'lucide-react';
+import { Save, Timer, Play, RotateCcw, X, TrendingUp } from 'lucide-react';
 
 export default function Workout() {
   const getInitialDay = () => {
@@ -15,6 +15,7 @@ export default function Workout() {
 
   const [selectedDay, setSelectedDay] = useState(getInitialDay());
   const [formData, setFormData] = useState({});
+  const [prevData, setPrevData] = useState({});
   const [showToast, setShowToast] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -24,12 +25,39 @@ export default function Workout() {
 
   const currentWorkout = workoutData.find(d => d.id === selectedDay);
 
+  // Restore current un-saved progress
   useEffect(() => {
     const saved = localStorage.getItem('gymTrackerData_v2');
     if (saved) {
       setFormData(JSON.parse(saved));
     }
   }, []);
+
+  // GỢI Ý ĐẨY TẠ THÔNG MINH (Progressive Overload Hints)
+  // Fetch previous session data logic
+  useEffect(() => {
+    async function fetchLastWorkout() {
+      if (!supabase) return;
+      
+      try {
+         const { data, error } = await supabase
+           .from('workout_history')
+           .select('data, date')
+           .eq('day_id', selectedDay)
+           .order('date', { ascending: false })
+         
+         // Lấy phiên tập gần đây nhất
+         if (data && data.length > 0) {
+           setPrevData(data[0].data);
+         } else {
+           setPrevData({});
+         }
+      } catch(e) {
+         console.warn("Could not fetch previous session hints", e);
+      }
+    }
+    fetchLastWorkout();
+  }, [selectedDay]);
 
   // Timer Countdown Logic
   useEffect(() => {
@@ -102,6 +130,7 @@ export default function Workout() {
       }
     }
 
+    // Reset weights form slightly? No, keeping it is standard for next week.
     setIsSaving(false);
     setShowToast(true);
     setTimeout(() => setShowToast(false), 3000);
@@ -113,7 +142,7 @@ export default function Workout() {
       
       <div className="card" style={{ borderTop: '4px solid var(--accent)' }}>
         <label style={{ display: 'block', marginBottom: '8px', color: 'var(--text-muted)' }}>
-          Hôm nay (Tự động phát hiện ngày)
+          Hôm nay (Tự động phát hiện)
         </label>
         <select 
           value={selectedDay} 
@@ -124,6 +153,11 @@ export default function Workout() {
             <option key={day.id} value={day.id}>{day.title}</option>
           ))}
         </select>
+        {Object.keys(prevData).length > 0 && (
+           <div style={{ fontSize: '0.8rem', color: 'var(--success)', marginTop: '10px', display: 'flex', alignItems: 'center', gap: '5px'}}>
+              <TrendingUp size={14} /> Hệ thống đã tải được mục tiêu tạ cũ của bạn!
+           </div>
+        )}
       </div>
 
       <div className="day-card card">
@@ -142,26 +176,37 @@ export default function Workout() {
                 {ex.name} <span className="exercise-target">{ex.target}</span>
               </div>
               <div className="sets-container">
-                {Array.from({ length: numSets }).map((_, i) => (
-                  <div key={i} className="set-box">
-                    <div className="set-label">Set {i + 1}</div>
-                    <input 
-                      type="number" 
-                      placeholder="kg" 
-                      step="0.5"
-                      value={formData[`${ex.id}_s${i+1}_w`] || ''}
-                      onChange={e => handleInputChange(`${ex.id}_s${i+1}`, 'w', e.target.value)}
-                      onFocus={(e) => e.target.select()}
-                    />
-                    <input 
-                      type="number" 
-                      placeholder="reps" 
-                      value={formData[`${ex.id}_s${i+1}_r`] || ''}
-                      onChange={e => handleInputChange(`${ex.id}_s${i+1}`, 'r', e.target.value)}
-                      onFocus={(e) => e.target.select()}
-                    />
-                  </div>
-                ))}
+                {Array.from({ length: numSets }).map((_, i) => {
+                  const pW = prevData[`${ex.id}_s${i+1}_w`];
+                  const pR = prevData[`${ex.id}_s${i+1}_r`];
+                  const pStr = pW && pR ? `${pW}kg x ${pR}` : null;
+                  
+                  return (
+                    <div key={i} className="set-box">
+                      <div className="set-label">Set {i + 1}</div>
+                      <input 
+                        type="number" 
+                        placeholder="kg" 
+                        step="0.5"
+                        value={formData[`${ex.id}_s${i+1}_w`] || ''}
+                        onChange={e => handleInputChange(`${ex.id}_s${i+1}`, 'w', e.target.value)}
+                        onFocus={(e) => e.target.select()}
+                      />
+                      <input 
+                        type="number" 
+                        placeholder="reps" 
+                        value={formData[`${ex.id}_s${i+1}_r`] || ''}
+                        onChange={e => handleInputChange(`${ex.id}_s${i+1}`, 'r', e.target.value)}
+                        onFocus={(e) => e.target.select()}
+                      />
+                      {pStr && (
+                        <div style={{ fontSize: '0.65rem', color: '#94a3b8', textAlign: 'center', marginTop: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', padding: '2px 0' }} title="Lần tập trước">
+                           Cũ: {pStr}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           );
