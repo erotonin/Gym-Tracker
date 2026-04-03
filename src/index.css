@@ -149,51 +149,87 @@ input:focus, select:focus {
   background: var(--danger);
 }
 
-/* Workout UI Specifics */
-.day-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 12px;
-}
-
-.day-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #60a5fa;
-}
-
+/* Exercise Items */
 .exercise-item {
-  margin-bottom: 15px;
   padding: 12px;
   background: rgba(255, 255, 255, 0.02);
   border-radius: 8px;
   border-left: 3px solid var(--accent);
 }
 
-.exercise-name {
-  font-weight: 600;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .exercise-target {
-  font-size: 0.75rem;
-  background-color: var(--text-muted);
-  color: var(--bg-color);
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-weight: 600;
+  font-size: 0.72rem;
+  background: rgba(59, 130, 246, 0.15);
+  color: #93c5fd;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
+/* Muscle tags */
+.muscle-tag {
+  font-size: 0.65rem;
+  color: #0f172a;
+  padding: 2px 7px;
+  border-radius: 8px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+/* Rest button (inline) */
+.rest-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.rest-btn:hover {
+  background: rgba(59,130,246,0.15);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Meta badges on workout header */
+.meta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  padding: 4px 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.meta-badge-compound {
+  background: rgba(59, 130, 246, 0.12);
+  color: #93c5fd;
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.meta-badge-accessory {
+  background: rgba(99, 102, 241, 0.12);
+  color: #a5b4fc;
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* Sets */
 .sets-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+  gap: 8px;
 }
 
 .set-box {
@@ -206,16 +242,73 @@ input:focus, select:focus {
 }
 
 .set-label {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   color: var(--text-muted);
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
 }
 
 .set-box input {
   text-align: center;
-  padding: 8px 4px;
+  padding: 7px 4px;
+  font-size: 0.9rem;
+}
+
+.prev-hint {
+  font-size: 0.62rem;
+  color: #64748b;
+  text-align: center;
+  background: rgba(255,255,255,0.04);
+  border-radius: 3px;
+  padding: 2px 0;
+}
+
+/* Cardio card */
+.cardio-card {
+  border-left: 4px solid #fbbf24;
+  background: rgba(251, 191, 36, 0.05);
+}
+
+.cardio-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+/* Floating Timer */
+.floating-timer {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(30, 41, 59, 0.97);
+  backdrop-filter: blur(12px);
+  padding: 10px 18px;
+  border-radius: 30px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--border);
+  z-index: 100;
+}
+
+.timer-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  padding: 5px 11px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.timer-btn:hover {
+  background: rgba(59,130,246,0.2);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 /* Toast */
@@ -225,12 +318,13 @@ input:focus, select:focus {
   right: 20px;
   background: var(--success);
   color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  padding: 12px 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
   font-weight: 600;
   z-index: 1000;
   animation: slideIn 0.3s ease-out;
+  font-size: 0.9rem;
 }
 
 @keyframes slideIn {
@@ -239,9 +333,7 @@ input:focus, select:focus {
 }
 
 @media (max-width: 500px) {
-  .exercise-name {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 5px;
+  .sets-container {
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
   }
 }
