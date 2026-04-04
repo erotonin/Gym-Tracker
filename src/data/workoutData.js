@@ -17,7 +17,7 @@ export const workoutData = [
             { id: 'u1_5', name: 'Pec Deck',                 sets: 2, reps: '12–15', muscles: ['Ngực'],             type: 'accessory' },
             { id: 'u1_6', name: 'Tricep Pushdown',          sets: 2, reps: '12–15', muscles: ['Tay sau'],          type: 'accessory' },
             { id: 'u1_7', name: 'Bicep Cable Curl',         sets: 2, reps: '12',    muscles: ['Tay trước'],        type: 'accessory' },
-            { id: 'u1_8', name: 'Face Pull',                sets: 2, reps: '15',    muscles: ['Vai sau'],          type: 'accessory' },
+            { id: 'u1_8', name: 'Rear Delt Fly Machine',     sets: 2, reps: '15',    muscles: ['Vai sau'],          type: 'accessory' },
         ]
     },
     {
@@ -53,7 +53,7 @@ export const workoutData = [
             { id: 'u2_2', name: 'Lat Pulldown',                sets: 4, reps: '8–10',  muscles: ['Lưng'],          type: 'compound' },
             { id: 'u2_3', name: 'Dumbbell Lateral Raise',      sets: 3, reps: '12–15', muscles: ['Vai giữa'],      type: 'accessory' },
             { id: 'u2_4', name: 'Single-arm Dumbbell Row',     sets: 3, reps: '12',    muscles: ['Lưng'],          type: 'accessory', note: 'mỗi bên' },
-            { id: 'u2_5', name: 'Face Pull',                   sets: 3, reps: '15–20', muscles: ['Vai sau'],       type: 'accessory' },
+            { id: 'u2_5', name: 'Rear Delt Fly Machine',        sets: 3, reps: '15–20', muscles: ['Vai sau'],       type: 'accessory' },
             { id: 'u2_6', name: 'Dip Bar',                     sets: 3, reps: '8–12',  muscles: ['Ngực', 'Tay sau'], type: 'accessory' },
             { id: 'u2_7', name: 'Bicep Curl (Dumbbell)',       sets: 2, reps: '12',    muscles: ['Tay trước'],     type: 'accessory' },
         ]
